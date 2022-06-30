@@ -3,7 +3,7 @@
 $servername = 'localhost';
 $username = 'root';
 $serpass = '';
-$databasename = '';
+$databasename = 'homing_pigeon';
 
 
 $conn = mysqli_connect($servername,$username,$serpass ,$databasename );
