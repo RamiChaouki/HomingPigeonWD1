@@ -25,7 +25,8 @@ function check_if_favourite($postcard_id)
  * A function that returns the id of the last unpaid cart from the database
  * parameters: none
  */
-function unpaid_cart_id() {
+function unpaid_cart_id()
+{
 
     require "config/db_config.php";
 
@@ -48,7 +49,7 @@ function check_if_in_cart($postcard_id)
     require "config/db_config.php";
 
     $cart_id = unpaid_cart_id();
-    
+
     $sql = "SELECT *
             FROM carts_postcards
             WHERE cart_id = '$cart_id'
@@ -93,3 +94,33 @@ function fetch_db_table_by_id($table_name, $id)
     return $row;
 }
 
+/**
+ * Ali Nehme
+ * A function that fetches the information of a postcard by name, description, or artist
+ * parameters: $postcard_id
+ */
+function filter_postcards()
+{
+    require "config/db_config.php";
+    $dbresult = fetch_db_table("postcards");
+
+        if (!empty($_POST["name"])) {
+            $name = $_POST['name'];
+            $sql = "SELECT * FROM postcards WHERE name LIKE '%$name%'";
+
+            $dbresult = mysqli_query($conn, $sql);
+        }
+
+        if (!empty($_POST['artist'])) {
+            $artist = $_POST['artist'];
+            $sql = "SELECT * FROM postcards WHERE artist LIKE '%$artist%'";
+
+            $dbresult = mysqli_query($conn, $sql);
+        }
+    
+        if (!empty($_POST["reset"])) {
+            $dbresult = fetch_db_table("postcards");
+        }
+
+    return $dbresult;
+}

@@ -3,7 +3,7 @@ session_start();
 $_SESSION["id"] = 1;
 $_SESSION["email"] = "ali.nehme@gmail.com";
 require_once 'includes/functions.inc.php';
-$dbresult = fetch_db_table("postcards");
+$dbresult = filter_postcards();
 ?>
 
 
@@ -24,8 +24,23 @@ $dbresult = fetch_db_table("postcards");
 </head>
 
 <body>
-
     <div class="container">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="row">
+            <div class="col">
+                <input type="text" name="name" class="form-control">
+            </div>
+            <div class="col">
+                <input type="submit" value="Filter by name" class="btn btn-primary">
+            </div>
+            <div class="col">
+                <input type="text" name="artist" class="form-control">
+            </div>
+            <div class="col">
+                <input type="submit" value="Filter by artist" class="btn btn-primary">
+            </div>
+            <input type="submit" name="reset" value="Reset" class="btn btn-primary col">
+        </form>
+        <br>
         <div class="row">
             <?php
             while ($row = mysqli_fetch_array($dbresult)) { ?>
@@ -81,9 +96,10 @@ $dbresult = fetch_db_table("postcards");
                 </div>
             <?php } ?>
         </div>
+    </div>
 
-        <!-- bootstap js -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <!-- bootstap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 </body>
 
 </html>
