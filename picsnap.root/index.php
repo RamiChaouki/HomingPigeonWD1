@@ -4,6 +4,7 @@ $_SESSION["id"] = 1;
 $_SESSION["email"] = "ali.nehme@gmail.com";
 require_once 'includes/functions.inc.php';
 $dbresult = filter_postcards();
+add_postcard();
 ?>
 
 
@@ -25,6 +26,7 @@ $dbresult = filter_postcards();
 
 <body>
     <div class="container">
+        <p class="text-center"><i class="text-danger">You can choose the number of postcards to order in cart before checkout</i></p>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="row">
             <div class="col">
                 <input type="text" name="name" class="form-control">
@@ -75,7 +77,9 @@ $dbresult = filter_postcards();
                                     <?php
                                     } else {
                                     ?>
-                                        <a href='<?php echo "includes/add_to_favourites.php?origin=index&id=" . $row['id'] ?>' class="btn btn-block btn-primary" name="add" value="add"><i class="fa-solid fa-heart-circle-plus"></i> Add to favorites</a>
+                                        <form method="post" class="row">
+                                            <button class="btn btn-block btn-primary" type="submit" name="add_to_favourites" value="<?php echo $row['id'] ?>"><i class="fa-solid fa-heart-circle-plus"></i> Add to favorites</button>
+                                        </form>
                                     <?php
                                     }
                                     // cart button
@@ -85,7 +89,9 @@ $dbresult = filter_postcards();
                                     <?php
                                     } else {
                                     ?>
-                                        <a href='<?php echo "includes/add_to_cart.php?origin=index&id=" . $row['id'] ?>' class="btn btn-block btn-primary" name="add" value="add"><i class="fa-solid fa-cart-plus"></i> Add to Cart</a>
+                                        <form method="post" class="row">
+                                            <button class="btn btn-block btn-primary" type="submit" name="add_to_cart" value="<?php echo $row['id'] ?>"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                                        </form>
                                 <?php
                                     }
                                 }
