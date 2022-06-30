@@ -124,3 +124,48 @@ function filter_postcards()
 
     return $dbresult;
 }
+
+/**
+ * Ali Nehme
+ * A function that adds a postcard to favourites or cart
+ * parameters: none
+ */
+function add_postcard() {
+
+    if(array_key_exists('add_to_favourites', $_POST)) {
+       add_to_favourites($_POST['add_to_favourites']);
+    }
+    else if(array_key_exists('add_to_cart', $_POST)) {
+        add_to_cart($_POST['add_to_cart']);
+    }
+}
+
+/**
+ * Ali Nehme
+ * A function that adds a postcard to favourites
+ * parameters: $postcard_id
+ */
+function add_to_favourites($postcard_id) {
+    require "config/db_config.php";
+
+        $userid = $_SESSION['id'];
+        
+        $addquery = "INSERT INTO favourites(user_id, postcard_id) values('$userid', '$postcard_id')";
+        if(mysqli_query($conn, $addquery)){header("Refresh:0");}
+    
+}
+
+/**
+ * Ali Nehme
+ * A function that adds a postcard to cart
+ * parameters: $postcard_id
+ */
+function add_to_cart($postcard_id) {
+    require "config/db_config.php";
+
+        $cart_id = unpaid_cart_id();
+        
+        $addquery = "INSERT INTO carts_postcards(cart_id, postcard_id, quantity) values ('$cart_id', '$postcard_id', '1')";
+
+        if(mysqli_query($conn, $addquery)){header("Refresh:0");}
+}

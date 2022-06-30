@@ -6,6 +6,7 @@ require_once 'includes/functions.inc.php';
 if (isset($_GET['id'])) {
     $row = fetch_db_table_by_id("postcards", $_GET['id']);
 }
+add_postcard();
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +60,9 @@ if (isset($_GET['id'])) {
                                 <?php
                                 } else {
                                 ?>
-                                    <a href='<?php echo "includes/add_to_favourites.php?origin=detail&id=" . $row['id'] ?>' class="btn btn-block btn-primary" name="add" value="add"><i class="fa-solid fa-heart-circle-plus"></i> Add to favorites</a>
+                                    <form method="post">
+                                        <button class="btn btn-block btn-primary" type="submit" name="add_to_favourites" value="<?php echo $row['id'] ?>"><i class="fa-solid fa-heart-circle-plus"></i> Add to favorites</button>
+                                    </form>
                                 <?php
                                 }
                                 // cart button
@@ -69,7 +72,9 @@ if (isset($_GET['id'])) {
                                 <?php
                                 } else {
                                 ?>
-                                    <a href='<?php echo "includes/add_to_cart.php?origin=detail&id=" . $row['id'] ?>' class="btn btn-block btn-primary" name="add" value="add"><i class="fa-solid fa-cart-plus"></i> Add to cart</a>
+                                    <form method="post">
+                                        <button class="btn btn-block btn-primary" type="submit" name="add_to_cart" value="<?php echo $row['id'] ?>"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                                    </form>
                             <?php
                                 }
                             }
