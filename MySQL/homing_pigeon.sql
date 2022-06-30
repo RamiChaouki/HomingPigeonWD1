@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 29, 2022 at 02:27 AM
+-- Generation Time: Jun 30, 2022 at 02:03 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -30,9 +30,16 @@ SET time_zone = "+00:00";
 CREATE TABLE `carts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `date` date NOT NULL,
+  `date` date NOT NULL DEFAULT current_timestamp(),
   `is_paid` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `carts`
+--
+
+INSERT INTO `carts` (`id`, `user_id`, `date`, `is_paid`) VALUES
+(1, 1, '2022-06-29', 0);
 
 -- --------------------------------------------------------
 
@@ -46,6 +53,14 @@ CREATE TABLE `carts_postcards` (
   `quantity` smallint(5) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `carts_postcards`
+--
+
+INSERT INTO `carts_postcards` (`cart_id`, `postcard_id`, `quantity`) VALUES
+(1, 1, 4),
+(1, 2, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -56,6 +71,15 @@ CREATE TABLE `favourites` (
   `user_id` int(11) NOT NULL,
   `postcard_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `favourites`
+--
+
+INSERT INTO `favourites` (`user_id`, `postcard_id`) VALUES
+(1, 1),
+(1, 2),
+(1, 3);
 
 -- --------------------------------------------------------
 
@@ -70,6 +94,18 @@ CREATE TABLE `postcards` (
   `price` float(5,2) NOT NULL DEFAULT 0.00,
   `artist` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `postcards`
+--
+
+INSERT INTO `postcards` (`id`, `name`, `description`, `price`, `artist`) VALUES
+(1, 'Montreal Poutine', 'Montreal Poutine', 9.99, 'Malak'),
+(2, 'Habitat 67', 'Montreal Habitat 67', 9.99, 'Malak'),
+(3, 'Ode to Timmies', 'Ode to Timmies', 9.99, 'Malak'),
+(4, 'cone', 'Montreal orange cones', 9.99, 'Malak'),
+(5, 'Sin City', 'Montreal Patisries', 9.99, 'Malak'),
+(6, 'Zoom Back to Reality', 'Zoom Back to Reality', 9.99, 'Malak');
 
 -- --------------------------------------------------------
 
@@ -87,6 +123,13 @@ CREATE TABLE `users` (
   `type` set('admin','customer') NOT NULL,
   `is_blocked` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `address`, `type`, `is_blocked`) VALUES
+(1, 'Ali', 'Nehme', 'ali.nehme@gmail.com', '123456', '123 fake street', 'customer', 0);
 
 --
 -- Indexes for dumped tables
@@ -133,19 +176,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `postcards`
 --
 ALTER TABLE `postcards`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
