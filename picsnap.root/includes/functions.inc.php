@@ -589,8 +589,13 @@ function deletePostcardFromDir($id,$artist,$localImgDir){
     $rectoPath=$artistDir.'recto_'.$id.'.png';
     $versoPath=$artistDir.'verso_'.$id.'.png';
     //deletes postcard files
+    try{
     unlink($rectoPath);
-    unlink($versoPath);
+    unlink($versoPath);}
+    finally{
+    //checks if directory is empty, deletes it if it is.
+    deleteEmptyDir($localImgDir,$artist);
+}
 }
 
 /**
