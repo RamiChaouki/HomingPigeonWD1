@@ -1,6 +1,6 @@
 <?php
-            include('./includes/config/db_config.php');
-            include('functions.inc.php');
+            include_once('./includes/config/db_config.php');
+            include_once('functions.inc.php');
             if(isset($_POST['add'])){
                             extract($_POST);
                             //returns the last id so that the filename can be changed
