@@ -1,18 +1,19 @@
-<!-- PROJECT INFO
-  Web Development Final Team Project for Pargol Poshtareh
-  Developed by: Ali Nehme, Alina Gotcherian, Edgar Townsend, Mitchell Fridman, Rami Chaouki
-  Last Update: July 1, 2022
-  -->
-
-<!-- FILE INFO
-  header.php file for Homing Pigeon
-  Includes HTML head, navbar and header
-  to be included at the top of all html pages of the project
-  (insert with php require)
-  Closing </body> & </html> tags must be provided by files that require header
--->
-
 <?php
+// <!-- PROJECT INFO
+// Web Development Final Team Project for Pargol Poshtareh
+// Developed by: Ali Nehme, Alina Gotcherian, Edgar Townsend, Mitchell Fridman, Rami Chaouki
+// Last Update: July 1, 2022
+// -->
+
+// <!-- FILE INFO
+// header.php file for Homing Pigeon
+// Includes HTML head, navbar and header
+// to be included at the top of all html pages of the project
+// (insert with php require)
+// Closing </body> & </html> tags must be provided by files that require header
+// -->
+
+
 session_start();
 // session_unset(); // Uncomment to simulate "logout"
 // session_destroy(); // Uncomment to simulate "logout"
