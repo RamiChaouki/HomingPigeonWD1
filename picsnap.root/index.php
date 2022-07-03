@@ -21,15 +21,15 @@ add_postcard();
       <input type="text" name="name" class="form-control">
     </div>
     <div class="col">
-      <input type="submit" value="Filter by name" class="btn btn-primary">
+      <input type="submit" value="Filter by name" class="btn btn-light">
     </div>
     <div class="col">
       <input type="text" name="artist" class="form-control">
     </div>
     <div class="col">
-      <input type="submit" value="Filter by artist" class="btn btn-primary">
+      <input type="submit" value="Filter by artist" class="btn btn-light">
     </div>
-    <input type="submit" name="reset" value="Reset" class="btn btn-primary col">
+    <input type="submit" name="reset" value="Reset" class="btn btn-secondary col">
   </form>
   <br>
   <div class="row mt-4">
