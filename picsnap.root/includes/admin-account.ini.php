@@ -4,20 +4,24 @@
             if(isset($_POST['add'])){
                             extract($_POST);
                             addUser($conn,$first_name,$last_name,$email,$password,$address,$type,$is_blocked);
-                            header('location: ../picsnap.root/admin-accounts.php');
+                            // header("Refresh:0");
+                            // header('location: ../picsnap.root/admin-accounts.php');
+                            refreshPage('http://localhost/picsnap.root/admin-accounts.php');
                             exit();
             }
             
             if(isset($_POST['edit'])){
                 extract($_POST);
                 editUser($conn,$id,$first_name,$last_name,$email,$password,$address,$type,$is_blocked);
-                header('location: ../picsnap.root/admin-accounts.php');
+                refreshPage('http://localhost/picsnap.root/admin-accounts.php');
+                // header('location: ../picsnap.root/admin-accounts.php');
                 exit();
             }
             
             if(isset($_GET['delete'])){
                 deleteUser($conn,$_GET['delete']);
-                header('location: ../picsnap.root/admin-accounts.php');
+                refreshPage('http://localhost/picsnap.root/admin-accounts.php');
+                // header('location: ../picsnap.root/admin-accounts.php');
                 exit();
             }
 
