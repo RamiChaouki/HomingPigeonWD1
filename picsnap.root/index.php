@@ -6,8 +6,8 @@ require 'header.php';
 
 <?php
 // session_start() provided by header.php
-$_SESSION["id"] = 1;
-$_SESSION["email"] = "ali.nehme@gmail.com";
+// $_SESSION["id"] = 1;
+// $_SESSION["email"] = "ali.nehme@gmail.com";
 require_once 'includes/functions.inc.php';
 $dbresult = filter_postcards();
 add_postcard();
@@ -33,6 +33,7 @@ add_postcard();
   </form>
   <br>
   <div class="row mt-4">
+    <h1>THE DIVE</h1>
     <?php
     create_postcard_cards($dbresult)
     ?>

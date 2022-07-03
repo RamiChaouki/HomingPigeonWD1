@@ -1,100 +1,105 @@
 <?php
 /*functions for login and sign up Edgar*/
-function isFieldEmpty($fname,$lname,$address,$email,$pwd,$pwdr){
-    $result=false;
-    if(empty($fname)||empty($lname)||empty($email)||empty($address)||empty($pwd)||empty($pwdr)){
-        $result=true;
-    }
-    return $result;
+function isFieldEmpty($fname, $lname, $address, $email, $pwd, $pwdr)
+{
+  $result = false;
+  if (empty($fname) || empty($lname) || empty($email) || empty($address) || empty($pwd) || empty($pwdr)) {
+    $result = true;
+  }
+  return $result;
 }
 
-function isFieldEmptyLogin($email,$pwd){
-    $result=false;
-    if(empty($email)||empty($pwd)){
-        $result=true;   
-    }
-    return $result;
+function isFieldEmptyLogin($email, $pwd)
+{
+  $result = false;
+  if (empty($email) || empty($pwd)) {
+    $result = true;
+  }
+  return $result;
 }
 
-function isEmailValid($email){
-    $result=false;
-    if(!preg_match("/[\s\S]/",$email)){
-        $result=true;
-    }
-    return $result;
+function isEmailValid($email)
+{
+  $result = false;
+  if (!preg_match("/[\s\S]/", $email)) {
+    $result = true;
+  }
+  return $result;
 }
 
-function isPwdNotMatch($pwd,$pwdr){
-    $result=false;
-    if($pwd!==$pwdr){
-        $result=true;
-    }
-    return $result;
+function isPwdNotMatch($pwd, $pwdr)
+{
+  $result = false;
+  if ($pwd !== $pwdr) {
+    $result = true;
+  }
+  return $result;
 }
 
-function isUIDExists($conn,$email){
-    $sql="Select * from users where email=?;";
-    $stmt = mysqli_stmt_init($conn);
-    if(!mysqli_stmt_prepare($stmt,$sql)){
-        header("location: ../signup.php?error=stmtfailed");
-        exit();
-    }
-
-    mysqli_stmt_bind_param($stmt,"s",$email);
-    mysqli_stmt_execute($stmt);
-
-    $resultData=mysqli_stmt_get_result($stmt);
-
-    if($row=mysqli_fetch_assoc($resultData)){
-        return $row;
-    }else{
-        $result=false;
-        return $result;
-    }
-    mysqli_stmt_close($stmt);
-}
-
-function createNewUser($conn,$fname,$lname,$email,$address,$pwd){
-    $sql="Insert into users (first_name,last_name,email,address,password) values (?,?,?,?,?);";
-    $stmt = mysqli_stmt_init($conn);
-    var_dump($conn);
-    if(!mysqli_stmt_prepare($stmt,$sql)){
-        header("location: ../signup.php?error=stmtfailed");
-        exit();
-    }
-    $hashedpwd=password_hash($pwd,PASSWORD_DEFAULT);
-    mysqli_stmt_bind_param($stmt,"sssss",$fname,$lname,$email,$address,$hashedpwd);
-    mysqli_stmt_execute($stmt);
-
-    
-    mysqli_stmt_close($stmt);
-    header("location: ../signup.php?error=none");
+function isUIDExists($conn, $email)
+{
+  $sql = "Select * from users where email=?;";
+  $stmt = mysqli_stmt_init($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../signup.php?error=stmtfailed");
     exit();
+  }
+
+  mysqli_stmt_bind_param($stmt, "s", $email);
+  mysqli_stmt_execute($stmt);
+
+  $resultData = mysqli_stmt_get_result($stmt);
+
+  if ($row = mysqli_fetch_assoc($resultData)) {
+    return $row;
+  } else {
+    $result = false;
+    return $result;
+  }
+  mysqli_stmt_close($stmt);
 }
 
-function loginUser($conn,$email,$pwd){
-    $uIDExists=isUIDExists($conn,$email);
+function createNewUser($conn, $fname, $lname, $email, $address, $pwd)
+{
+  $sql = "Insert into users (first_name,last_name,email,address,password) values (?,?,?,?,?);";
+  $stmt = mysqli_stmt_init($conn);
+  var_dump($conn);
+  if (!mysqli_stmt_prepare($stmt, $sql)) {
+    header("location: ../signup.php?error=stmtfailed");
+    exit();
+  }
+  $hashedpwd = password_hash($pwd, PASSWORD_DEFAULT);
+  mysqli_stmt_bind_param($stmt, "sssss", $fname, $lname, $email, $address, $hashedpwd);
+  mysqli_stmt_execute($stmt);
 
-    if($uIDExists===false){
-        header("location: ../signup.php?error=wronguserlogin");
-        exit();
-    }
 
-    $hashedPwd=$uIDExists["password"];
+  mysqli_stmt_close($stmt);
+  header("location: ../signup.php?error=none");
+  exit();
+}
 
-    $checkpwd=password_verify($pwd,$hashedPwd);
-    if($checkpwd===false){
-        header("location: ../login.php?error=wronguserpassword");
-        exit();
-    }
-    else if($checkpwd===true){
-        session_start();
-        $_SESSION["id"]=$uIDExists["id"];
-        $_SESSION["email"]=$uIDExists["email"];
-        header("location: ../index.php");
-        exit();
-    }
+function loginUser($conn, $email, $pwd)
+{
+  $uIDExists = isUIDExists($conn, $email);
 
+  if ($uIDExists === false) {
+    header("location: ../signup.php?error=wronguserlogin");
+    exit();
+  }
+
+  $hashedPwd = $uIDExists["password"];
+
+  $checkpwd = password_verify($pwd, $hashedPwd);
+  if ($checkpwd === false) {
+    header("location: ../login.php?error=wronguserpassword");
+    exit();
+  } else if ($checkpwd === true) {
+    session_start();
+    $_SESSION["id"] = $uIDExists["id"];
+    $_SESSION["email"] = $uIDExists["email"];
+    header("location: ../index.php");
+    exit();
+  }
 }
 /* end of Sign up and Login functions Edgar */
 
@@ -301,46 +306,48 @@ function create_postcard_cards($dbresult)
     </a>
     <div class='card-body d-flex flex-column'>
       <?php if (!isset($_SESSION['email'])) {  ?>
-      <p><a href="login.php" role="button" class="btn btn-primary btn-block">Login</a></p>
-      <?php
-          } else {
-          ?>
       <div class="d-grid gap-2">
+        <p><a href="login.php" role="button" class="btn btn-primary btn-block">Login</a></p>
         <?php
-              // favourites button
-              if (check_if_favourite($row['id'])) {
-              ?>
-        <a href="#" class="btn btn-block btn-outline-success disabled"><i class="fa-solid fa-heart-circle-check"></i> In
-          Favorites</a>
-        <?php
-              } else {
-              ?>
-        <form method="post" class="row w-100 mx-auto">
-          <button class="btn btn-block btn-primary" type="submit" name="add_to_favourites"
-            value="<?php echo $row['id'] ?>"><i class="fa-solid fa-heart-circle-plus"></i> Add to favorites</button>
-        </form>
-        <?php
-              }
-              // cart button
-              if (check_if_in_cart($row['id'])) {
-              ?>
-        <a href="#" class="btn btn-block btn-success disabled"><i class="fa-solid fa-check"></i> In Cart</a>
-        <?php
-              } else {
-              ?>
-        <form method="post" class="row w-100 mx-auto">
-          <button class="btn btn-block btn-primary" type="submit" name="add_to_cart" value="<?php echo $row['id'] ?>"><i
-              class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-        </form>
-        <?php
-              }
-            }
+          } else {
             ?>
+        <div class="d-grid gap-2">
+          <?php
+                // favourites button
+                if (check_if_favourite($row['id'])) {
+                ?>
+          <a href="#" class="btn btn-block btn-outline-success disabled"><i class="fa-solid fa-heart-circle-check"></i>
+            In
+            Favorites</a>
+          <?php
+                } else {
+                ?>
+          <form method="post" class="row w-100 mx-auto">
+            <button class="btn btn-block btn-primary" type="submit" name="add_to_favourites"
+              value="<?php echo $row['id'] ?>"><i class="fa-solid fa-heart-circle-plus"></i> Add to favorites</button>
+          </form>
+          <?php
+                }
+                // cart button
+                if (check_if_in_cart($row['id'])) {
+                ?>
+          <a href="#" class="btn btn-block btn-success disabled"><i class="fa-solid fa-check"></i> In Cart</a>
+          <?php
+                } else {
+                ?>
+          <form method="post" class="row w-100 mx-auto">
+            <button class="btn btn-block btn-primary" type="submit" name="add_to_cart"
+              value="<?php echo $row['id'] ?>"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+          </form>
+          <?php
+                }
+              }
+              ?>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<?php
+  <?php
   }
 }
 
@@ -881,56 +888,55 @@ function remove_favourite()
 function create_fav_cards($userFavourites)
 {
   while ($row = mysqli_fetch_array($userFavourites)) { ?>
-<div class="col-lg-3 mb-3 d-flex">
-  <div class="card border-dark mb-3" style="width: 18rem;">
-    <div class="card-header">
-      <h4 class="card-title"><?php echo $row['name'] ?></h4>
-      <h6 class="card-subtitle mb-2 text-muted"><i>by <?php echo $row['artist'] ?></i></h6>
-    </div>
-    <a href='<?php echo "postcard-detail.php?id=" . $row['id'] ?>'>
-      <div class="thumbnail">
-        <div class="picture1">
-          <img class='card-img-top' src='<?php echo "images/artist_malak/recto_" . $row['id'] . ".png" ?>'
-            alt='Card image cap' title="press for more details">
-        </div>
-        <div class="picture2">
-          <img class='card-img-top' src='<?php echo "images/artist_malak/verso_" . $row['id'] . ".png" ?>'
-            alt='Card image cap' title="press for more details">
-        </div>
+  <div class="col-lg-3 mb-3 d-flex">
+    <div class="card border-dark mb-3" style="width: 18rem;">
+      <div class="card-header">
+        <h4 class="card-title"><?php echo $row['name'] ?></h4>
+        <h6 class="card-subtitle mb-2 text-muted"><i>by <?php echo $row['artist'] ?></i></h6>
       </div>
-    </a>
-    <div class='card-body d-flex flex-column'>
-      <div class="d-grid gap-2">
-        <?php
-            // Remove favourite button
-            if (check_if_favourite($row['id'])) {
-            ?>
-        <form method="post" class="row w-100 mx-auto">
-          <button class="btn btn-block btn-danger" type="submit" name="remove_from_favourites"
-            value="<?php echo $row['id'] ?>"><i class="bi bi-trash3-fill"></i> Unfavorite
-          </button>
-        </form>
-        <?php
-            }
-            // cart button
-            if (check_if_in_cart($row['id'])) {
-            ?>
-        <a href="#" class="btn btn-block btn-success disabled"><i class="fa-solid fa-check"></i> In Cart</a>
-        <?php
-            } else {
-            ?>
-        <form method="post" class="row w-100 mx-auto">
-          <button class="btn btn-block btn-primary" type="submit" name="add_to_cart" value="<?php echo $row['id'] ?>"><i
-              class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-        </form>
-        <?php
-            }
-            ?>
+      <a href='<?php echo "postcard-detail.php?id=" . $row['id'] ?>'>
+        <div class="thumbnail">
+          <div class="picture1">
+            <img class='card-img-top' src='<?php echo "images/artist_malak/recto_" . $row['id'] . ".png" ?>'
+              alt='Card image cap' title="press for more details">
+          </div>
+          <div class="picture2">
+            <img class='card-img-top' src='<?php echo "images/artist_malak/verso_" . $row['id'] . ".png" ?>'
+              alt='Card image cap' title="press for more details">
+          </div>
+        </div>
+      </a>
+      <div class='card-body d-flex flex-column'>
+        <div class="d-grid gap-2">
+          <?php
+              // Remove favourite button
+              if (check_if_favourite($row['id'])) {
+              ?>
+          <form method="post" class="row w-100 mx-auto">
+            <button class="btn btn-block btn-danger" type="submit" name="remove_from_favourites"
+              value="<?php echo $row['id'] ?>"><i class="bi bi-trash3-fill"></i> Unfavorite
+            </button>
+          </form>
+          <?php
+              }
+              // cart button
+              if (check_if_in_cart($row['id'])) {
+              ?>
+          <a href="#" class="btn btn-block btn-success disabled"><i class="fa-solid fa-check"></i> In Cart</a>
+          <?php
+              } else {
+              ?>
+          <form method="post" class="row w-100 mx-auto">
+            <button class="btn btn-block btn-primary" type="submit" name="add_to_cart"
+              value="<?php echo $row['id'] ?>"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+          </form>
+          <?php
+              }
+              ?>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<?php
+  <?php
   }
 }
-
