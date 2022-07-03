@@ -6,8 +6,8 @@ require 'header.php';
 
 <?php
 // session_start() provided by header.php
-$_SESSION["id"] = 1;
-$_SESSION["email"] = "chaoukirami@live.ca";
+// $_SESSION["id"] = 1;
+// $_SESSION["email"] = "chaoukirami@live.ca";
 require_once 'includes/functions.inc.php';
 $dbresult = filter_postcards();
 add_postcard();

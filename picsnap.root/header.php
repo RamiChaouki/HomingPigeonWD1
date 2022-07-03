@@ -106,7 +106,7 @@ require_once 'includes/functions.inc.php';
           </li>
           <!-- Logout -->
           <li class="nav-item">
-            <a class="nav-link" href="../includes/logout.inc.php">logout</a>
+            <a class="nav-link" href="includes/logout.inc.php">logout</a>
           </li>
           <?php
             } else {
@@ -128,7 +128,7 @@ require_once 'includes/functions.inc.php';
           </li>
           <!-- Logout -->
           <li class="nav-item">
-            <a class="nav-link" href="../includes/logout.inc.php">logout</a>
+            <a class="nav-link" href="includes/logout.inc.php">logout</a>
           </li>
           <?php
             }
@@ -175,4 +175,3 @@ require_once 'includes/functions.inc.php';
   </script>
 
   <!-- Closing </body> & </html> tags provided by files that require header -->
-
