@@ -33,7 +33,6 @@ add_postcard();
   </form>
   <br>
   <div class="row mt-4">
-    <h1>THE DIVE</h1>
     <?php
     create_postcard_cards($dbresult)
     ?>
