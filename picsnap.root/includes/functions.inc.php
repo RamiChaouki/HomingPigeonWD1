@@ -690,3 +690,10 @@ function is_admin()
     return false;
   }
 }
+
+
+function refreshPage($link){
+    echo '<script type="text/javascript">
+window.location.href ="'.$link.'";
+</script>';
+}
