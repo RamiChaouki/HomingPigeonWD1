@@ -34,4 +34,9 @@ if (isset($_GET['error'])) {
         echo '<h2> Please fill in all the fields</h2>';
     }
 }
+<!-- insert header -->
+
+// Stores the (string) file name of the current page in a variable to use in header.php
+$currentPage = basename(__FILE__, '.php');
+require 'header.php';
 ?>
