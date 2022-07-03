@@ -940,3 +940,11 @@ function create_fav_cards($userFavourites)
   <?php
   }
 }
+
+
+function refreshPage($link)
+{
+  echo '<script type="text/javascript">
+window.location.href ="' . $link . '";
+</script>';
+}
