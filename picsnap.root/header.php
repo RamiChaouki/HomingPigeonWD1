@@ -49,7 +49,6 @@ require_once 'includes/functions.inc.php';
   <!-- LINK TO BOOTSTRAP ICONS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
 
-
   <!-- LINK TO FONT-AWESOME ICONS -->
   <script src="https://kit.fontawesome.com/c3d51d9f30.js" crossorigin="anonymous"></script>
 
@@ -106,7 +105,7 @@ require_once 'includes/functions.inc.php';
           </li>
           <!-- Logout -->
           <li class="nav-item">
-            <a class="nav-link" href="../includes/logout.inc.php">logout</a>
+            <a class="nav-link" href="includes/logout.inc.php">logout</a>
           </li>
           <?php
             } else {
@@ -128,7 +127,7 @@ require_once 'includes/functions.inc.php';
           </li>
           <!-- Logout -->
           <li class="nav-item">
-            <a class="nav-link" href="../includes/logout.inc.php">logout</a>
+            <a class="nav-link" href="includes/logout.inc.php">logout</a>
           </li>
           <?php
             }
@@ -175,4 +174,3 @@ require_once 'includes/functions.inc.php';
   </script>
 
   <!-- Closing </body> & </html> tags provided by files that require header -->
-
