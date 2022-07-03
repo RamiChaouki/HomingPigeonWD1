@@ -175,4 +175,3 @@ require_once 'includes/functions.inc.php';
   </script>
 
   <!-- Closing </body> & </html> tags provided by files that require header -->
-
