@@ -295,19 +295,21 @@ function create_postcard_cards($dbresult)
     <a href='<?php echo "postcard-detail.php?id=" . $row['id'] ?>'>
       <div class="thumbnail">
         <div class="picture1">
-          <img class='card-img-top' src='<?php echo "images/artist_malak/recto_" . $row['id'] . ".png" ?>'
-            alt='Card image cap' title="press for more details">
+          <img class='card-img-top'
+            src='<?php echo "images/artist_" . $row['artist'] . "/recto_" . $row['id'] . ".png" ?>' alt='Card image cap'
+            title="press for more details">
         </div>
         <div class="picture2">
-          <img class='card-img-top' src='<?php echo "images/artist_malak/verso_" . $row['id'] . ".png" ?>'
-            alt='Card image cap' title="press for more details">
+          <img class='card-img-top'
+            src='<?php echo "images/artist_" . $row['artist'] . "/verso_" . $row['id'] . ".png" ?>' alt='Card image cap'
+            title="press for more details">
         </div>
       </div>
     </a>
     <div class='card-body d-flex flex-column'>
       <?php if (!isset($_SESSION['email'])) {  ?>
       <div class="d-grid gap-2">
-        <p><a href="login.php" role="button" class="btn btn-primary btn-block">Login</a></p>
+        <a href="login.php" role="button" class="btn btn-primary btn-block">Login</a>
         <?php
           } else {
             ?>
