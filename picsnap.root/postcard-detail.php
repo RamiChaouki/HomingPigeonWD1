@@ -17,7 +17,7 @@ add_postcard();
 
 
 <!-- body -->
-<div class="container">
+<div class="container mt-4">
   <div class="card text-center">
     <div class="card-header">
       <h4 class="card-title"><?php echo $row['name'] ?></h4>
