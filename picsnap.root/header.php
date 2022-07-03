@@ -1,4 +1,5 @@
 <?php
+
 // <!-- PROJECT INFO
 // Web Development Final Team Project for Pargol Poshtareh
 // Developed by: Ali Nehme, Alina Gotcherian, Edgar Townsend, Mitchell Fridman, Rami Chaouki
@@ -19,10 +20,12 @@ session_start();
 // session_destroy(); // Uncomment to simulate "logout"
 include_once "includes/config/db_config.php";
 require_once 'includes/functions.inc.php';
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
   <!-- Meta information -->
@@ -172,3 +175,4 @@ require_once 'includes/functions.inc.php';
   </script>
 
   <!-- Closing </body> & </html> tags provided by files that require header -->
+
