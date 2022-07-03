@@ -1,4 +1,5 @@
 <?php
+$currentPage = basename(__FILE__, '.php');
 include_once "header.php";
 ?>
 
@@ -11,7 +12,7 @@ include_once "header.php";
                 </div>
                 <div class="panel-body">
                     <p>Login to favourite a postcard.</p>
-                    <form method="post" action="login_submit.php">
+                    <form method="post" action="./includes/login.inc.php">
                         <div class="form-group">
                             <input type="email" class="form-control" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
                         </div>
@@ -34,8 +35,6 @@ if (isset($_GET['error'])) {
         echo '<h2> Please fill in all the fields</h2>';
     }
 }
-<!-- insert header -->
+
 
 // Stores the (string) file name of the current page in a variable to use in header.php
-$currentPage = basename(__FILE__, '.php');
-require 'header.php';

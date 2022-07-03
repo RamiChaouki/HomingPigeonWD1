@@ -3,11 +3,12 @@
             include_once('functions.inc.php');
             if(isset($_POST['add'])){
                             extract($_POST);
+                            admin_account_validation($first_name,$last_name);
                             addUser($conn,$first_name,$last_name,$email,$password,$address,$type,$is_blocked);
                             // header("Refresh:0");
-                            // header('location: ../picsnap.root/admin-accounts.php');
-                            refreshPage('http://localhost/picsnap.root/admin-accounts.php');
-                            exit();
+                            // // header('location: ../picsnap.root/admin-accounts.php');
+                            // refreshPage('http://localhost/picsnap.root/admin-accounts.php');
+                            // exit();
             }
             
             if(isset($_POST['edit'])){

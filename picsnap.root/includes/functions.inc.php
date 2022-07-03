@@ -75,26 +75,54 @@ function createNewUser($conn,$fname,$lname,$email,$address,$pwd){
 function loginUser($conn,$email,$pwd){
     $uIDExists=isUIDExists($conn,$email);
 
-    if($uIDExists===false){
-        header("location: ../signup.php?error=wronguserlogin");
-        exit();
-    }
+    // if($uIDExists===false){
+    //     header("location: ../login.php?error=wronguserlogin");
+    //     exit();
+    // }
 
     $hashedPwd=$uIDExists["password"];
 
-    $checkpwd=password_verify($pwd,$hashedPwd);
-    if($checkpwd===false){
-        header("location: ../login.php?error=wronguserpassword");
-        exit();
-    }
-    else if($checkpwd===true){
+    // $checkpwd=password_verify($pwd,$hashedPwd);
+    // if($checkpwd===false){
+    //     header("location: ../login.php?error=wronguserpassword");
+    //     exit();
+    // }
+    // else if($checkpwd===true){
         session_start();
         $_SESSION["id"]=$uIDExists["id"];
         $_SESSION["email"]=$uIDExists["email"];
-        header("location: ../index.php");
-        exit();
-    }
+        $_SESSION["type"]=getActType($conn,$_SESSION["id"]);
+        if($_SESSION['type']=='admin'){
 
+            header("location: ../admin-accounts.php");
+            echo 'customer';
+            echo $_SESSION['email'];
+            exit();
+        }elseif($_SESSION['type']=='customer'){
+            
+            header("location: ../index.php");
+            echo 'customer';
+            echo $_SESSION['email'];
+            exit();
+        }else{
+            
+            // header("location: ../index.php");
+            echo $_SESSION['email'];
+            echo 'failure';
+            exit();
+        }
+    // }
+
+}
+
+function getActType($conn,$id){
+    $sql='select * from users where id =?';
+    $stmt=$conn->prepare($sql);
+    $stmt->bind_param('i',$id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();//[id=>1, fn=>rami]
+    $_SESSION["type"]=$row['type'];
 }
 /* end of Sign up and Login functions Edgar */
 
@@ -395,12 +423,20 @@ function displayUserRows($conn)
  */
 function displayAddAccount($conn)
 {
+  $first_name_error='';
+  $last_name_error='';
+  if(isset($_GET['first_name'])){
+    $first_name_error=$_GET['first_name'];
+  }
+  if(isset($_GET['last_name'])){
+    $last_name_error=$_GET['last_name'];
+  }
   $table = 'users';
   echo '<form action="admin-accounts.php" method="POST">';
   echo '<tr>';
   echo '<th class=text-danger scope="row">' . getNextIdUser($conn) . '</th>';
-  echo '<td><input type=text name="first_name" value=""></td>';
-  echo '<td><input type=text name="last_name" value=""></td>';
+  echo '<td><input type=text name="first_name" value='.$first_name_error.'></td>';
+  echo '<td><input type=text name="last_name" value='.$last_name_error.'></td>';
   echo '<td><input type=text name="email" value=""></td>';
   echo '<td><input type=text name="password" value=""></td>';
   echo '<td><input type=text name="address" value=""></td>';
@@ -412,6 +448,73 @@ function displayAddAccount($conn)
   echo '</tr>';
   echo '</form>';
 }
+
+/**
+ * Rami Chaouki
+ * Admin Account Validation
+ * FIRST NAME
+ */
+function is_FN_invalid($first_name){
+    if(empty($first_name)){
+        echo 'fn empty';
+        return 'first_name="Please enter a name..."';
+    }else{
+        echo 'fn not empty';
+        return false;
+    }
+}
+
+ /**
+ * Rami Chaouki
+ * Admin Account Validation
+ * LAST NAME
+ */
+function is_LN_invalid($last_name){
+    if(empty($last_name)){
+        return 'last_name="Please enter a name..."';
+    }else{
+        return false;
+    }
+}
+/**
+ * Rami Chaouki
+ * Admin Account Validation
+ * EMAIL NAME
+ */
+
+ /**
+ * Rami Chaouki
+ * Admin Account Validation
+ * PASSWORD
+ */
+
+ /**
+ * Rami Chaouki
+ * Admin Account Validation
+ * ADDRESS
+ */
+
+/**
+ * Rami Chaouki
+ * Admin Account Validation
+ * ADMIN ACCOUNTS VALIDATION
+ */
+function admin_account_validation($first_name,$last_name){
+    $errors='';
+    if(is_FN_invalid($first_name)){
+        $errors=$errors==''?'?':$errors.'&';
+        $errors=$errors.is_FN_invalid($first_name);
+        echo $errors;
+    }
+    if(is_LN_invalid($last_name)){
+        $errors=$errors==''?'?':$errors.'&';
+        $errors=$errors.is_LN_invalid($last_name);
+        // echo $errors;
+    }
+    header('location: http://localhost/picsnap.root/admin-accounts.php'.$errors);
+    exit();
+}
+
 
 /**
  * Rami Chaouki
