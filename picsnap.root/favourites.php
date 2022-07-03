@@ -46,7 +46,3 @@ add_postcard();
 </body>
 
 </html>
-
-<!-- New create cards with remove from favorites button
-and a "remove_card function that checks if the button has been pressed,
-and when it has, removes the favorite from db and refreshes the page  -->
