@@ -2,6 +2,7 @@
 // Stores the (string) file name of the current page in a variable to use in header.php
 $currentPage = basename(__FILE__, '.php');
 include_once "header.php";
+require_once "./includes/functions.inc.php";
 ?>
 <div class="container mt-4">
   <div class="row">
