@@ -8,7 +8,8 @@
                             storeImage($localImgDir,$_FILES,$lastID,$artist,'recto');
                             storeImage($localImgDir,$_FILES,$lastID,$artist,'verso');
                             // var_dump($_FILES);
-                            header('location: ../picsnap.root/admin-postcard.php');
+                            // header('location: ../picsnap.root/admin-postcard.php');
+                            refreshPage('http://localhost/picsnap.root/admin-postcard.php');
                             exit();
             }
             
@@ -26,13 +27,15 @@
                 editPostcard($conn,$id,$name,$description,$price,$artist);
                 storeImage($localImgDir,$_FILES,$oldPostcardInfo['id'],$artist,'recto');
                 storeImage($localImgDir,$_FILES,$oldPostcardInfo['id'],$artist,'verso');
-                header('location: ../picsnap.root/admin-postcard.php');
+                // header('location: ../picsnap.root/admin-postcard.php');
+                refreshPage('http://localhost/picsnap.root/admin-postcard.php');
                 exit();
             }
             
             if(isset($_GET['delete'])){
                 deletePostcard($conn,$_GET['delete'],$_GET['artist'],$localImgDir);
-                header('location: ../picsnap.root/admin-postcard.php');
+                // header('location: ../picsnap.root/admin-postcard.php');
+                refreshPage('http://localhost/picsnap.root/admin-postcard.php');
                 exit();
             }
 

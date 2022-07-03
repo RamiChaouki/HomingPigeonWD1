@@ -1,4 +1,3 @@
-<!-- insert header -->
 <?php
 // Stores the (string) file name of the current page in a variable to use in header.php
 $currentPage = basename(__FILE__, '.php');
@@ -7,8 +6,8 @@ require 'header.php';
 
 <?php
 // session_start() provided by header.php
-$_SESSION["id"] = 1;
-$_SESSION["email"] = "ali.nehme@gmail.com";
+// $_SESSION["id"] = 1;
+// $_SESSION["email"] = "ali.nehme@gmail.com";
 require_once 'includes/functions.inc.php';
 if (isset($_GET['id'])) {
   $row = fetch_db_table_by_id("postcards", $_GET['id']);
@@ -18,7 +17,7 @@ add_postcard();
 
 
 <!-- body -->
-<div class="container">
+<div class="container mt-4">
   <div class="card text-center">
     <div class="card-header">
       <h4 class="card-title"><?php echo $row['name'] ?></h4>
@@ -39,7 +38,9 @@ add_postcard();
         </div>
         <div class="col">
           <?php if (!isset($_SESSION['email'])) {  ?>
-          <p><a href="login.php" role="button" class="btn btn-primary btn-block">Login</a></p>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="login.php" role="button" class="btn btn-primary btn-block">Login</a>
+          </div>
           <?php
           } else {
           ?>
@@ -80,11 +81,11 @@ add_postcard();
     </div>
     <div class="card-body tab-content">
       <div class="tab-pane active" id="recto">
-        <img src='<?php echo "images/artist_malak/recto_" . $row['id'] . ".png" ?>'
+        <img src='<?php echo "images/artist_" . $row['artist'] . "/recto_" . $row['id'] . ".png" ?>'
           alt='<?php echo $row['name'] . " recto image" ?>' class="card-img">
       </div>
       <div class="tab-pane" id="verso">
-        <img src='<?php echo "images/artist_malak/verso_" . $row['id'] . ".png" ?>'
+        <img src='<?php echo "images/artist_" . $row['artist'] . "/verso_" . $row['id'] . ".png" ?>'
           alt='<?php echo $row['name'] . " verso image" ?>' class="card-img">
       </div>
       <div class="tab-pane" id="description">

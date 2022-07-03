@@ -1,4 +1,5 @@
 <?php
+
 // <!-- PROJECT INFO
 // Web Development Final Team Project for Pargol Poshtareh
 // Developed by: Ali Nehme, Alina Gotcherian, Edgar Townsend, Mitchell Fridman, Rami Chaouki
@@ -19,10 +20,12 @@ session_start();
 // session_destroy(); // Uncomment to simulate "logout"
 include_once "includes/config/db_config.php";
 require_once 'includes/functions.inc.php';
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
   <!-- Meta information -->
@@ -44,8 +47,7 @@ require_once 'includes/functions.inc.php';
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
   <!-- LINK TO BOOTSTRAP ICONS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
 
   <!-- LINK TO FONT-AWESOME ICONS -->
   <script src="https://kit.fontawesome.com/c3d51d9f30.js" crossorigin="anonymous"></script>
@@ -103,7 +105,7 @@ require_once 'includes/functions.inc.php';
           </li>
           <!-- Logout -->
           <li class="nav-item">
-            <a class="nav-link" href="../includes/logout.inc.php">logout</a>
+            <a class="nav-link" href="includes/logout.inc.php">logout</a>
           </li>
           <?php
             } else {
@@ -125,7 +127,7 @@ require_once 'includes/functions.inc.php';
           </li>
           <!-- Logout -->
           <li class="nav-item">
-            <a class="nav-link" href="../includes/logout.inc.php">logout</a>
+            <a class="nav-link" href="includes/logout.inc.php">logout</a>
           </li>
           <?php
             }
