@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 // <!-- PROJECT INFO
 // Web Development Final Team Project for Pargol Poshtareh
 // Developed by: Ali Nehme, Alina Gotcherian, Edgar Townsend, Mitchell Fridman, Rami Chaouki

@@ -3,8 +3,6 @@
 $currentPage = basename(__FILE__, '.php');
 require 'header.php';
 
-$_SESSION["id"] = 1;
-$_SESSION["email"] = "ali.nehme@gmail.com";
 $Errors = $err = ["empty_fields" => "", "old_password" => "", "new_password" => "", "confirm_password" => "", "mysql_error" => "", "successful" => ""];
 if (array_key_exists('change_password', $_POST)) {
   $Errors = change_password();

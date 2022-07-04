@@ -2,10 +2,6 @@
 // Stores the (string) file name of the current page in a variable to use in header.php
 $currentPage = basename(__FILE__, '.php');
 require 'header.php';
-
-$_SESSION["id"] = 1;
-$_SESSION["email"] = "ali.nehme@gmail.com";
-
 require_once 'includes/functions.inc.php';
 
 $dbresult = fetch_db_table_by_id("users", $_SESSION["id"]);
