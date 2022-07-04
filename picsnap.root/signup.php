@@ -25,11 +25,11 @@ require_once "./includes/functions.inc.php";
         </div>
         <div class="form-group my-2">
           <input type="password" class="form-control" name="password" placeholder="Password(min. 6 characters)"
-            required="true" pattern=".{6,}">
+             required="true" pattern=".{6,}"> 
         </div>
         <div class="form-group my-2">
           <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password"
-            required="true" pattern=".{6,}">
+             required="true" pattern=".{6,}"> 
         </div>
         <div class="form-group my-2">
           <input type="submit" class="btn btn-primary" name="submit" value="Sign Up">

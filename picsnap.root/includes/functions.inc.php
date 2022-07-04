@@ -21,7 +21,7 @@ function isFieldEmptyLogin($email, $pwd)
 function isEmailValid($email)
 {
   $result = false;
-  if (!preg_match("/[\s\S]/", $email)) {
+  if (preg_match("/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/", $email)) {
     $result = true;
   }
   return $result;
@@ -59,23 +59,28 @@ function isUIDExists($conn, $email)
   mysqli_stmt_close($stmt);
 }
 
-function createNewUser($conn, $fname, $lname, $email, $address, $pwd)
+function createNewUser($conn, $fname, $lname, $email, $pwd, $address)
 {
-  $sql = "Insert into users (first_name,last_name,email,address,password) values (?,?,?,?,?);";
+  $uIDExists=isUIDExists($conn,$email);
+  $type='customer';
+  $is_blocked=0;
+  $sql = "Insert into users (first_name,last_name,email,password,address,type,is_blocked) values (?,?,?,?,?,?,?);";
   $stmt = mysqli_stmt_init($conn);
   var_dump($conn);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
-    // header("location: ../signup.php?error=stmtfailed");
-    // exit();
+    header("location: ../signup.php?error=stmtfailed");
+    exit();
   }
+  //triggers if email already exists
+    if($uIDExists==true){
+        header("location: ../signup.php?error=emailalreadyexists");
+        exit();
+}
   $hashedpwd = password_hash($pwd, PASSWORD_DEFAULT);
-  mysqli_stmt_bind_param($stmt, "sssss", $fname, $lname, $email, $address, $hashedpwd);
+  mysqli_stmt_bind_param($stmt, "ssssssi", $fname, $lname, $email, $hashedpwd, $address,$type,$is_blocked);
   mysqli_stmt_execute($stmt);
 
-    // if($uIDExists===false){
-    //     header("location: ../login.php?error=wronguserlogin");
-    //     exit();
-    // }
+  
 
   mysqli_stmt_close($stmt);
   header("location: ../signup.php?error=none");
@@ -86,17 +91,17 @@ function loginUser($conn, $email, $pwd){
   $uIDExists = isUIDExists($conn, $email);
 
   if ($uIDExists === false) {
-    header("location: ../signup.php?error=wronguserlogin");
+    header("location: ../login.php?error=wronguserlogin");
     exit();
   }
 
   $hashedPwd = $uIDExists["password"];
-    // $checkpwd=password_verify($pwd,$hashedPwd);
-    // if($checkpwd===false){
-    //     header("location: ../login.php?error=wronguserpassword");
-    //     exit();
-    // }
-    // else if($checkpwd===true){
+    $checkpwd=password_verify($pwd,$hashedPwd);
+    if($checkpwd===false){
+        header("location: ../login.php?error=wronguserpassword");
+        exit();
+    }
+    else if($checkpwd===true){
         session_start();
         $_SESSION["id"]=$uIDExists["id"];
         $_SESSION["email"]=$uIDExists["email"];
@@ -125,7 +130,7 @@ function loginUser($conn, $email, $pwd){
             echo 'failure';
             exit();
         }
-    // }
+    }
 
 }
 
@@ -358,8 +363,7 @@ function create_postcard_cards($dbresult)
                 if (check_if_favourite($row['id'])) {
                 ?>
           <a href="#" class="btn btn-block btn-outline-success disabled"><i class="fa-solid fa-heart-circle-check"></i>
-            In
-            Favorites</a>
+            In Favorites</a>
           <?php
                 } else {
                 ?>
@@ -391,6 +395,127 @@ function create_postcard_cards($dbresult)
   <?php
   }
 }
+
+
+/**
+ * Ali Nehme
+ * A function that edits personal info of a user
+ * 
+ */
+
+function edit_profile_event_listner()
+{
+
+  if (array_key_exists('edit_profile', $_POST)) {
+    return edit_profile();
+  } else if (array_key_exists('change_password', $_POST)) {
+    return change_password();
+  }
+}
+
+/**
+ * Ali Nehme
+ * A function that edits personal info of a user using the form in in the edit_profile.php
+ * 
+ */
+function edit_profile()
+{
+  $err = ["empty_fields" => "", "first_name" => "", "last_name" => "", "email" => "", "mysql_error" => "", "successful" => ""];
+
+  require "config/db_config.php";
+
+  $userid = $_SESSION['id'];
+  $first_name = $_POST['first_name'];
+  $last_name = $_POST['last_name'];
+  $email = $_POST['email'];
+  $address = $_POST['address'];
+
+  if (count(array_filter($_POST)) != (count($_POST) - 1)) {
+    $err["empty_fields"] = "All fields should be filled";
+  }
+
+  if (!empty($first_name)) {
+    if (!preg_match("/^[A-z.-]+$/", $first_name)) {
+      $err["first_name"] = "First Name should only include letters";
+    }
+  }
+
+  if (!empty($last_name)) {
+    if (!preg_match("/^[A-z.-]+$/", $last_name)) {
+      $err["last_name"] = "Last Name should only include letters";
+    }
+  }
+
+  if (!empty($email)) {
+    if (!preg_match("/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/", $email)) {
+      $err["email"] = "The email format entered is invalid";
+    }
+  }
+
+  if (empty($err["empty_fields"]) && empty($err["first_name"]) && empty($err["last_name"]) && empty($err["email"])) {
+    $addquery = "UPDATE users SET first_name = '$first_name', last_name = '$last_name', email = '$email', address = '$address' WHERE id = $userid";
+    if (!mysqli_query($conn, $addquery)) {
+      $err["mysql_error"] = sprintf("Error message: %s\n", mysqli_error($conn));
+    } else {
+      header("location:profile.php");
+      $err["successful"] = "Profile updated successfully";
+    }
+  }
+  return $err;
+}
+
+/**
+ * Ali Nehme
+ * A function that edits the password of a user using the form in in the change_password.php
+ * 
+ */
+function change_password()
+{
+  $err = ["empty_fields" => "", "old_password" => "", "new_password" => "", "confirm_password" => "", "mysql_error" => "", "successful" => ""];
+
+  require "config/db_config.php";
+  $userid = $_SESSION['id'];
+  $dbresult = fetch_db_table_by_id("users", $_SESSION["id"]);
+  $old_password_db = $dbresult['password'];
+  $old_pass_field = $_POST['old_password'];
+  $new_password =  $_POST['new_password'];
+  $confirm_password = $_POST['confirm_password'];
+
+  if (count(array_filter($_POST)) != (count($_POST) - 1)) {
+    $err["empty_fields"] = "All fields should be filled";
+  }
+
+  if (!empty($old_pass_field)) {
+    if (!password_verify($old_pass_field, $old_password_db)) {
+      $err["old_password"] = "Old password does not match the entered one";
+    }
+  }
+
+  if (!empty($new_password)) {
+    if (!preg_match("/^(?=.*)([^\s]){6,16}$/i", $new_password)) {
+      $err["new_password"] = "Password should not include spaces";
+    }
+  }
+
+  if (!empty($confirm_password)) {
+    if ($new_password != $confirm_password) {
+      $err["confirm_password"] = "New password does not match its confirmation";
+    }
+  }
+
+  if (empty($err["empty_fields"]) && empty($err["old_password"]) && empty($err["new_password"]) && empty($err["confirm_password"])) {
+    $hashed_password = password_hash($pwd, PASSWORD_DEFAULT);
+    $addquery = "UPDATE users SET password = '$hashed_password' WHERE id = $userid";
+    if (!mysqli_query($conn, $addquery)) {
+      $err["mysql_error"] = sprintf("Error message: %s\n", mysqli_error($conn));
+    } else {
+      header("location:profile.php");
+      $err["successful"] = "Password changed successfully";
+    }
+  }
+  return $err;
+}
+
 
 /**
  * Rami Chaouki
@@ -616,7 +741,8 @@ function addUser($conn, $first_name, $last_name, $email, $password, $address, $t
   $sql = 'insert into users (first_name, last_name, email, password, address, type, is_blocked)
     values (?,?,?,?,?,?,?);';
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param("ssssssi", $first_name, $last_name, $email, $password, $address, $type, $is_blocked);
+  $hashedPwd=password_hash($password, PASSWORD_DEFAULT);
+  $stmt->bind_param("ssssssi", $first_name, $last_name, $email, $hashedPwd, $address, $type, $is_blocked);
   $stmt->execute();
 }
 
@@ -636,7 +762,10 @@ function editUser($conn, $id, $first_name, $last_name, $email, $password, $addre
   } else {
     $sql = 'update users set first_name=?, last_name=?, email=?, password=?, address=?, type=?, is_blocked=? where id=?';
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ssssssii', $first_name, $last_name, $email, $password, $address, $type, $is_blocked, $id);
+    //hashes password
+    $hashedPwd=password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt->bind_param('ssssssii', $first_name, $last_name, $email, $hashedPwd, $address, $type, $is_blocked, $id);
     $stmt->execute();
   }
 }

@@ -1,5 +1,6 @@
 <?php
 require_once "functions.inc.php";
+require_once "./config/db_config.php";
 
 if(isset($_POST['submit'])){
     $fname=$_POST["first_name"];
@@ -14,7 +15,7 @@ if(isset($_POST['submit'])){
         exit();
     }
 
-    if(isEmailValid($email)!==false){
+    if(isEmailValid($email)===false){
         header("location: ../signup.php?error=invalidemail");
         exit();
     }
@@ -24,14 +25,10 @@ if(isset($_POST['submit'])){
         exit();
     }
 
-    // if(isUIDExists($conn,$email)!==false){
-    //     header("location: ../signup.php?error=useralreadyexists");
-    //     exit();
-    // }
+    if(isUIDExists($conn,$email)!==false){
+        header("location: ../signup.php?error=emailalreadyexists");
+        exit();
+    }
 
-    createNewUser($conn,$fname,$lname,$email,$address,$pwd);
-}
-else{
-    header("location: ../signup.php");
-    exit();
+    createNewUser($conn,$fname,$lname,$email,$pwd,$address);
 }

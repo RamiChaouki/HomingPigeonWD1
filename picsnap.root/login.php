@@ -10,6 +10,7 @@ include_once "header.php";
       <div class="panel panel-primary">
         <div class="panel-heading">
           <h3>LOGIN</h3>
+
         </div>
         <div class="panel-body">
           <p>Login to favourite a postcard.</p>
@@ -39,4 +40,8 @@ if (isset($_GET['error'])) {
   if ($_GET['error'] == 'emptyfield') {
     echo '<h2> Please fill in all the fields</h2>';
   }
+  if ($_GET['error'] == 'wronguserlogin') {
+    echo '<h2> Account not found, please sign-up!</h2>';
+  }
 }
+
