@@ -106,9 +106,8 @@ require_once 'includes/functions.inc.php';
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-              <i class="bi bi-sliders"></i>
+              <i class="bi bi-sliders me-1"></i>
               admin
-
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="admin-accounts.php">accounts</a></li>
