@@ -66,10 +66,24 @@ require_once 'includes/functions.inc.php';
   <!-- Navbar -->
   <nav id="nav-content-target" class="navbar navbar-expand-sm navbar-light navbar-homingpigeon">
     <div id="nav-content" class="container-fluid">
+
+      <!-- Nav logo redirects to a different page depending on if user is an admin or customer -->
+      <?php if (isset($_SESSION['email']) && is_admin()) { ?>
+
+      <a class="navbar-brand d-flex align-items-center" href="admin-accounts.php">
+        <img class="me-1" src="images/homing_pigeon_logo.png" alt="Homing Pigeon logo" />
+        <p class="m-0 nav-logo">Homing Pigeon</p>
+      </a>
+
+      <?php } else { ?>
+
       <a class="navbar-brand d-flex align-items-center" href="index.php">
         <img class="me-1" src="images/homing_pigeon_logo.png" alt="Homing Pigeon logo" />
         <p class="m-0 nav-logo">Homing Pigeon</p>
       </a>
+
+      <?php } ?>
+
       <!-- "Hamburger menu" button toggled for mobile layout -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +106,9 @@ require_once 'includes/functions.inc.php';
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
+              <i class="bi bi-sliders"></i>
               admin
+
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="admin-accounts.php">accounts</a></li>

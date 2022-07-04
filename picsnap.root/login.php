@@ -13,7 +13,7 @@ include_once "header.php";
         </div>
         <div class="panel-body">
           <p>Login to favourite a postcard.</p>
-          <form method="post" action="login_submit.php">
+          <form method="post" action="../includes/login.inc.php">
             <div class="form-group my-2">
               <input type="email" class="form-control" name="email" placeholder="Email"
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
