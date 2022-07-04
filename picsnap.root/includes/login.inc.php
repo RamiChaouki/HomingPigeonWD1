@@ -7,10 +7,10 @@ if(isset($_POST['email'])){
     require_once './config/db_config.php';
     require_once 'functions.inc.php';
 
-    // if(isFieldEmptyLogin($email,$pwd)!==false){
-    //     header("location:../login.php?error=emptyfield");
-    //     exit();
-    // }
+    if(isFieldEmptyLogin($uname,$pwd)!==false){
+        header("location:../login.php?error=emptyfield");
+        exit();
+    }
 
     loginUser($conn,$uname,$pwd);
 }
