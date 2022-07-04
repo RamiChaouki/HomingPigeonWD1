@@ -21,7 +21,7 @@ function isFieldEmptyLogin($email, $pwd)
 function isEmailValid($email)
 {
   $result = false;
-  if (preg_match("/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/", $email)) {
+  if (preg_match("/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,3}$/", $email)) {
     $result = true;
   }
   return $result;
@@ -91,14 +91,14 @@ function loginUser($conn, $email, $pwd){
   $uIDExists = isUIDExists($conn, $email);
 
   if ($uIDExists === false) {
-    header("location: ../login.php?error=wronguserlogin");
+    header("location: ../login.php?error=wronguserinfo");
     exit();
   }
 
   $hashedPwd = $uIDExists["password"];
     $checkpwd=password_verify($pwd,$hashedPwd);
     if($checkpwd===false){
-        header("location: ../login.php?error=wronguserpassword");
+        header("location: ../login.php?error=wronguserinfo");
         exit();
     }
     else if($checkpwd===true){
@@ -403,6 +403,26 @@ function create_postcard_cards($dbresult)
  */
 function displayUserRows($conn)
 {
+    $first_name_error='';
+  $last_name_error='';
+  $email_error='';
+  $password_error='';
+  $address_error='';
+  if(isset($_GET['edit_first_name'])){
+    $first_name_error=$_GET['edit_first_name'];
+  }
+  if(isset($_GET['edit_last_name'])){
+    $last_name_error=$_GET['edit_last_name'];
+  }
+  if(isset($_GET['edit_email'])){
+    $email_error=$_GET['edit_email'];
+  }
+  if(isset($_GET['edit_address'])){
+    $address_error=$_GET['edit_address'];
+  }
+  if(isset($_GET['edit_password'])){
+    $password_error=$_GET['edit_password'];
+  }
   $sql = 'select * from users';
   $result = mysqli_query($conn, $sql);
   $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -412,14 +432,19 @@ function displayUserRows($conn)
       echo '<form action="admin-accounts.php" method="POST">';
       echo '<tr>';
       echo '<th scope="row">' . $id . '</th>';
-      echo '<td><input type=text name="first_name" value="' . $first_name . '"></td>';
-      echo '<td><input type=text name="last_name" value="' . $last_name . '"></td>';
-      echo '<td><input type=text name="email" value=' . $email . '></td>';
-      echo '<td><input type=text name="password" value=""></td>';
-      echo '<td><input type=text name="address" value="' . $address . '"></td>';
+      echo '<td><input type=text name="first_name" value="' . $first_name . '">';
+      echo '<br> <span>'.$first_name_error.'<span></td>';
+      echo '<td><input type=text name="last_name" value="' . $last_name . '">';
+      echo '<br> <span>'.$last_name_error.'<span></td>';
+      echo '<td><input type=text name="email" value=' . $email . '>';
+      echo '<br> <span>'.$email_error.'<span></td>';
+      echo '<td><input type=text name="password" value="">';
+      echo '<br> <span>'.$password_error.'<span></td>';
+      echo '<td><input type=text name="address" value="' . $address . '">';
+      echo '<br> <span>'.$address_error.'<span></td>';
       echo '<td>' . accountTypeDropdown($type) . '</td>';
       echo '<td>' . blockedStatusDropdown($is_blocked) . '</td>';
-      echo '<input type="hidden" name="id" value=' . $id . '/>';
+      echo '<input type="hidden" name="id" value=' . $id . '>';
       echo '<input type="hidden" name="edit"/>'; //hidden input used to distinguish between which submit form was used
       echo '<td><button type="submit">Save</button></td>';
       echo '<td><button><a href="admin-accounts.php?delete=' . $id . '">Delete</button></td>';
@@ -450,21 +475,33 @@ function displayAddAccount($conn)
 {
   $first_name_error='';
   $last_name_error='';
+  $email_error='';
+  $password_error='';
+  $address_error='';
   if(isset($_GET['first_name'])){
     $first_name_error=$_GET['first_name'];
   }
   if(isset($_GET['last_name'])){
     $last_name_error=$_GET['last_name'];
   }
+  if(isset($_GET['email'])){
+    $email_error=$_GET['email'];
+  }
+  if(isset($_GET['password'])){
+    $password_error=$_GET['password'];
+  }
+  if(isset($_GET['address'])){
+    $address_error=$_GET['address'];
+  }
   $table = 'users';
   echo '<form action="admin-accounts.php" method="POST">';
   echo '<tr>';
   echo '<th class=text-danger scope="row">' . getNextIdUser($conn) . '</th>';
-  echo '<td><input type=text name="first_name" value='.$first_name_error.'></td>';
-  echo '<td><input type=text name="last_name" value='.$last_name_error.'></td>';
-  echo '<td><input type=text name="email" value=""></td>';
-  echo '<td><input type=text name="password" value=""></td>';
-  echo '<td><input type=text name="address" value=""></td>';
+  echo '<td><input type=text name="first_name" value="" placeholder='.$first_name_error.'></td>';
+  echo '<td><input type=text name="last_name" value="" placeholder='.$last_name_error.'></td>';
+  echo '<td><input type=text name="email" value="" placeholder='.$email_error.'></td>';
+  echo '<td><input type=text name="password" value="" placeholder='.$password_error.'></td>';
+  echo '<td><input type=text name="address" value="" placeholder='.$address_error.'></td>';
   echo '<input type="hidden" name="add"/>'; //hidden input used to distinguish between which submit form was used
   echo '<td>' . accountTypeDropdown() . '</td>';
   echo '<td>' . blockedStatusDropdown() . '</td>';
@@ -481,10 +518,8 @@ function displayAddAccount($conn)
  */
 function is_FN_invalid($first_name){
     if(empty($first_name)){
-        echo 'fn empty';
         return 'first_name="Please enter a name..."';
     }else{
-        echo 'fn not empty';
         return false;
     }
 }
@@ -506,38 +541,82 @@ function is_LN_invalid($last_name){
  * Admin Account Validation
  * EMAIL NAME
  */
-
+function is_email_invalid($email){
+    if(empty($email)){
+        return 'email="Please enter an email..."';
+    }elseif(!isEmailValid($email)){
+        return 'email="Format: abc@xyz.ab"';
+    }else{
+        return false;
+    }
+}
  /**
  * Rami Chaouki
  * Admin Account Validation
  * PASSWORD
  */
-
+function is_password_invalid($password,$skipEmpty=false){
+    if(empty($password)&&!$skipEmpty){
+        return 'password="Please enter an password..."';
+    }elseif(strlen($password)<6&&strlen($password)>0){
+        return 'password="Pwd must be 6 char min"';
+    }
+    else{
+        return false;
+    }
+}
  /**
  * Rami Chaouki
  * Admin Account Validation
  * ADDRESS
  */
+function is_address_invalid($address){
+    if(empty($address)){
+        return 'address="Please enter an address..."';
+    }else{
+        return false;
+    }
+}
 
 /**
  * Rami Chaouki
  * Admin Account Validation
  * ADMIN ACCOUNTS VALIDATION
  */
-function admin_account_validation($first_name,$last_name){
+function admin_account_validation($first_name,$last_name,$email,$password,$address,$id=-1,$isEdit=false){
     $errors='';
+    $editSpecifier='';
+    $skipEmpty=false;
+    if($isEdit==true){
+        $editSpecifier="edit_";
+        $skipEmpty=true;
+    }
     if(is_FN_invalid($first_name)){
         $errors=$errors==''?'?':$errors.'&';
-        $errors=$errors.is_FN_invalid($first_name);
+        $errors=$errors.$editSpecifier.is_FN_invalid($first_name);
         echo $errors;
     }
     if(is_LN_invalid($last_name)){
         $errors=$errors==''?'?':$errors.'&';
-        $errors=$errors.is_LN_invalid($last_name);
-        // echo $errors;
+        $errors=$errors.$editSpecifier.is_LN_invalid($last_name);
     }
-    // header('location: http://localhost/picsnap.root/admin-accounts.php'.$errors);
-    exit();
+    if(is_email_invalid($email)){
+        $errors=$errors==''?'?':$errors.'&';
+        $errors=$errors.$editSpecifier.is_email_invalid($email);
+    }
+    
+    if(is_password_invalid($password,$skipEmpty)){
+        $errors=$errors==''?'?':$errors.'&';
+        $errors=$errors.$editSpecifier.is_password_invalid($password,$skipEmpty);
+    }
+    
+    if(is_address_invalid($address)){
+        $errors=$errors==''?'?':$errors.'&';
+        $errors=$errors.$editSpecifier.is_address_invalid($address);
+    }
+    if(!$errors==''){
+    header('location: http://localhost/picsnap.root/admin-accounts.php'.$errors.'&id='.$id);
+    exit();}
 }
 
 
