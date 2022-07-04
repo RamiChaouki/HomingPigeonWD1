@@ -27,11 +27,11 @@ include_once "header.php";
                 </div>
                 <div class="panel-footer">Don't have an account yet? <a href="signup.php">Register</a></div>
             </div>
-        </div>
-      </div>
+       
     </div>
   </div>
 </div>
+
 <?php
 if (isset($_GET['error'])) {
   if ($_GET['error'] == 'emptyfield') {
@@ -41,3 +41,4 @@ if (isset($_GET['error'])) {
     echo '<h2> Wrong account information, please try again or sign-up!</h2>';
   }
 }
+
