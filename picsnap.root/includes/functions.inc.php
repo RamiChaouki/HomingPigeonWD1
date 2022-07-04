@@ -21,7 +21,7 @@ function isFieldEmptyLogin($email, $pwd)
 function isEmailValid($email)
 {
   $result = false;
-  if (!preg_match("/[\s\S]/", $email)) {
+  if (preg_match("/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/", $email)) {
     $result = true;
   }
   return $result;
@@ -59,23 +59,28 @@ function isUIDExists($conn, $email)
   mysqli_stmt_close($stmt);
 }
 
-function createNewUser($conn, $fname, $lname, $email, $address, $pwd)
+function createNewUser($conn, $fname, $lname, $email, $pwd, $address)
 {
-  $sql = "Insert into users (first_name,last_name,email,address,password) values (?,?,?,?,?);";
+  $uIDExists=isUIDExists($conn,$email);
+  $type='customer';
+  $is_blocked=0;
+  $sql = "Insert into users (first_name,last_name,email,password,address,type,is_blocked) values (?,?,?,?,?,?,?);";
   $stmt = mysqli_stmt_init($conn);
   var_dump($conn);
   if (!mysqli_stmt_prepare($stmt, $sql)) {
-    // header("location: ../signup.php?error=stmtfailed");
-    // exit();
+    header("location: ../signup.php?error=stmtfailed");
+    exit();
   }
+  //triggers if email already exists
+    if($uIDExists==true){
+        header("location: ../signup.php?error=emailalreadyexists");
+        exit();
+}
   $hashedpwd = password_hash($pwd, PASSWORD_DEFAULT);
-  mysqli_stmt_bind_param($stmt, "sssss", $fname, $lname, $email, $address, $hashedpwd);
+  mysqli_stmt_bind_param($stmt, "ssssssi", $fname, $lname, $email, $hashedpwd, $address,$type,$is_blocked);
   mysqli_stmt_execute($stmt);
 
-    // if($uIDExists===false){
-    //     header("location: ../login.php?error=wronguserlogin");
-    //     exit();
-    // }
+  
 
   mysqli_stmt_close($stmt);
   header("location: ../signup.php?error=none");
@@ -86,17 +91,17 @@ function loginUser($conn, $email, $pwd){
   $uIDExists = isUIDExists($conn, $email);
 
   if ($uIDExists === false) {
-    header("location: ../signup.php?error=wronguserlogin");
+    header("location: ../login.php?error=wronguserlogin");
     exit();
   }
 
   $hashedPwd = $uIDExists["password"];
-    // $checkpwd=password_verify($pwd,$hashedPwd);
-    // if($checkpwd===false){
-    //     header("location: ../login.php?error=wronguserpassword");
-    //     exit();
-    // }
-    // else if($checkpwd===true){
+    $checkpwd=password_verify($pwd,$hashedPwd);
+    if($checkpwd===false){
+        header("location: ../login.php?error=wronguserpassword");
+        exit();
+    }
+    else if($checkpwd===true){
         session_start();
         $_SESSION["id"]=$uIDExists["id"];
         $_SESSION["email"]=$uIDExists["email"];
@@ -125,7 +130,7 @@ function loginUser($conn, $email, $pwd){
             echo 'failure';
             exit();
         }
-    // }
+    }
 
 }
 
@@ -616,7 +621,8 @@ function addUser($conn, $first_name, $last_name, $email, $password, $address, $t
   $sql = 'insert into users (first_name, last_name, email, password, address, type, is_blocked)
     values (?,?,?,?,?,?,?);';
   $stmt = $conn->prepare($sql);
-  $stmt->bind_param("ssssssi", $first_name, $last_name, $email, $password, $address, $type, $is_blocked);
+  $hashedPwd=password_hash($password, PASSWORD_DEFAULT);
+  $stmt->bind_param("ssssssi", $first_name, $last_name, $email, $hashedPwd, $address, $type, $is_blocked);
   $stmt->execute();
 }
 
@@ -636,7 +642,10 @@ function editUser($conn, $id, $first_name, $last_name, $email, $password, $addre
   } else {
     $sql = 'update users set first_name=?, last_name=?, email=?, password=?, address=?, type=?, is_blocked=? where id=?';
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ssssssii', $first_name, $last_name, $email, $password, $address, $type, $is_blocked, $id);
+    //hashes password
+    $hashedPwd=password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt->bind_param('ssssssii', $first_name, $last_name, $email, $hashedPwd, $address, $type, $is_blocked, $id);
     $stmt->execute();
   }
 }

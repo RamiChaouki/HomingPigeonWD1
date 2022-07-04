@@ -18,7 +18,7 @@ include_once "header.php";
                             <input type="email" class="form-control" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
                         </div>
                         <div class="form-group my-2">
-                            <input type="password" class="form-control" name="password" placeholder="Password(min. 6 characters)" pattern=".{6,}">
+                            <input type="password" class="form-control" name="password" placeholder="Password(min. 6 characters)" <!--pattern=".{6,}-->">
                         </div>
                         <div class="form-group my-2">
                             <input type="submit" value="Login" class="btn btn-primary">
@@ -36,5 +36,8 @@ include_once "header.php";
 if (isset($_GET['error'])) {
   if ($_GET['error'] == 'emptyfield') {
     echo '<h2> Please fill in all the fields</h2>';
+  }
+  if ($_GET['error'] == 'wronguserlogin') {
+    echo '<h2> Account not found, please sign-up!</h2>';
   }
 }
