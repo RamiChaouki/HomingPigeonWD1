@@ -413,6 +413,7 @@ function edit_profile()
     if (!mysqli_query($conn, $addquery)) {
       $err["mysql_error"] = sprintf("Error message: %s\n", mysqli_error($conn));
     } else {
+      header("location:profile.php");
       $err["successful"] = "Profile updated successfully";
     }
   }
@@ -464,6 +465,7 @@ function change_password()
     if (!mysqli_query($conn, $addquery)) {
       $err["mysql_error"] = sprintf("Error message: %s\n", mysqli_error($conn));
     } else {
+      header("location:profile.php");
       $err["successful"] = "Password changed successfully";
     }
   }
