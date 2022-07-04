@@ -17,7 +17,7 @@ require_once "./includes/functions.inc.php";
         </div>
         <div class="form-group my-2">
           <input type="email" class="form-control" name="email" placeholder="Email" required="true"
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$">
         </div>
 
         <div class="form-group my-2">
