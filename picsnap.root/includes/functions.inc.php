@@ -72,17 +72,18 @@ function createNewUser($conn, $fname, $lname, $email, $address, $pwd)
   mysqli_stmt_bind_param($stmt, "sssss", $fname, $lname, $email, $address, $hashedpwd);
   mysqli_stmt_execute($stmt);
 
-    // if($uIDExists===false){
-    //     header("location: ../login.php?error=wronguserlogin");
-    //     exit();
-    // }
+  // if($uIDExists===false){
+  //     header("location: ../login.php?error=wronguserlogin");
+  //     exit();
+  // }
 
   mysqli_stmt_close($stmt);
   header("location: ../signup.php?error=none");
   exit();
 }
 
-function loginUser($conn, $email, $pwd){
+function loginUser($conn, $email, $pwd)
+{
   $uIDExists = isUIDExists($conn, $email);
 
   if ($uIDExists === false) {
@@ -91,53 +92,54 @@ function loginUser($conn, $email, $pwd){
   }
 
   $hashedPwd = $uIDExists["password"];
-    // $checkpwd=password_verify($pwd,$hashedPwd);
-    // if($checkpwd===false){
-    //     header("location: ../login.php?error=wronguserpassword");
-    //     exit();
-    // }
-    // else if($checkpwd===true){
-        session_start();
-        $_SESSION["id"]=$uIDExists["id"];
-        $_SESSION["email"]=$uIDExists["email"];
-        $_SESSION["type"]=getAct($conn,$_SESSION["id"])['type'];
-        $_SESSION['is_blocked']=getAct($conn,$_SESSION["id"])['is_blocked'];
-        if($_SESSION['type']=='admin'){
+  // $checkpwd=password_verify($pwd,$hashedPwd);
+  // if($checkpwd===false){
+  //     header("location: ../login.php?error=wronguserpassword");
+  //     exit();
+  // }
+  // else if($checkpwd===true){
+  session_start();
+  $_SESSION["id"] = $uIDExists["id"];
+  $_SESSION["email"] = $uIDExists["email"];
+  $_SESSION["type"] = getAct($conn, $_SESSION["id"])['type'];
+  $_SESSION['is_blocked'] = getAct($conn, $_SESSION["id"])['is_blocked'];
+  if ($_SESSION['type'] == 'admin') {
 
-            header("location: ../admin-accounts.php");
-            echo 'customer';
-            echo $_SESSION['email'];
-            exit();
-        }elseif($_SESSION['type']=='customer'){
-            if($_SESSION['is_blocked']===1){
-                header("location: ../account-blocked.php");
-                exit();
-            }
-            header("location: ../index.php");
-            echo 'customer';
-            echo $_SESSION['email'];
-            exit();
-        }else{
-            
-            // header("location: ../index.php");
-            echo $_SESSION['email'].'<br>';
-            echo $_SESSION['type'].'<br>';
-            echo 'failure';
-            exit();
-        }
-    // }
+    header("location: ../admin-accounts.php");
+    echo 'customer';
+    echo $_SESSION['email'];
+    exit();
+  } elseif ($_SESSION['type'] == 'customer') {
+    if ($_SESSION['is_blocked'] === 1) {
+      header("location: ../account-blocked.php");
+      exit();
+    }
+    header("location: ../index.php");
+    echo 'customer';
+    echo $_SESSION['email'];
+    exit();
+  } else {
+
+    // header("location: ../index.php");
+    echo $_SESSION['email'] . '<br>';
+    echo $_SESSION['type'] . '<br>';
+    echo 'failure';
+    exit();
+  }
+  // }
 
 }
 
-function getAct($conn,$id){
-    $sql='select * from users where id =?';
-    $stmt=$conn->prepare($sql);
-    $stmt->bind_param('i',$id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();//[id=>1, fn=>rami]
-    var_dump($row['type']);
-    return $row;
+function getAct($conn, $id)
+{
+  $sql = 'select * from users where id =?';
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param('i', $id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $row = $result->fetch_assoc(); //[id=>1, fn=>rami]
+  var_dump($row['type']);
+  return $row;
 }
 
 /* end of Sign up and Login functions Edgar */
@@ -443,20 +445,20 @@ function displayUserRows($conn)
  */
 function displayAddAccount($conn)
 {
-  $first_name_error='';
-  $last_name_error='';
-  if(isset($_GET['first_name'])){
-    $first_name_error=$_GET['first_name'];
+  $first_name_error = '';
+  $last_name_error = '';
+  if (isset($_GET['first_name'])) {
+    $first_name_error = $_GET['first_name'];
   }
-  if(isset($_GET['last_name'])){
-    $last_name_error=$_GET['last_name'];
+  if (isset($_GET['last_name'])) {
+    $last_name_error = $_GET['last_name'];
   }
   $table = 'users';
   echo '<form action="admin-accounts.php" method="POST">';
   echo '<tr>';
   echo '<th class=text-danger scope="row">' . getNextIdUser($conn) . '</th>';
-  echo '<td><input type=text name="first_name" value='.$first_name_error.'></td>';
-  echo '<td><input type=text name="last_name" value='.$last_name_error.'></td>';
+  echo '<td><input type=text name="first_name" value=' . $first_name_error . '></td>';
+  echo '<td><input type=text name="last_name" value=' . $last_name_error . '></td>';
   echo '<td><input type=text name="email" value=""></td>';
   echo '<td><input type=text name="password" value=""></td>';
   echo '<td><input type=text name="address" value=""></td>';
@@ -474,27 +476,29 @@ function displayAddAccount($conn)
  * Admin Account Validation
  * FIRST NAME
  */
-function is_FN_invalid($first_name){
-    if(empty($first_name)){
-        echo 'fn empty';
-        return 'first_name="Please enter a name..."';
-    }else{
-        echo 'fn not empty';
-        return false;
-    }
+function is_FN_invalid($first_name)
+{
+  if (empty($first_name)) {
+    echo 'fn empty';
+    return 'first_name="Please enter a name..."';
+  } else {
+    echo 'fn not empty';
+    return false;
+  }
 }
 
- /**
+/**
  * Rami Chaouki
  * Admin Account Validation
  * LAST NAME
  */
-function is_LN_invalid($last_name){
-    if(empty($last_name)){
-        return 'last_name="Please enter a name..."';
-    }else{
-        return false;
-    }
+function is_LN_invalid($last_name)
+{
+  if (empty($last_name)) {
+    return 'last_name="Please enter a name..."';
+  } else {
+    return false;
+  }
 }
 /**
  * Rami Chaouki
@@ -502,13 +506,13 @@ function is_LN_invalid($last_name){
  * EMAIL NAME
  */
 
- /**
+/**
  * Rami Chaouki
  * Admin Account Validation
  * PASSWORD
  */
 
- /**
+/**
  * Rami Chaouki
  * Admin Account Validation
  * ADDRESS
@@ -519,20 +523,21 @@ function is_LN_invalid($last_name){
  * Admin Account Validation
  * ADMIN ACCOUNTS VALIDATION
  */
-function admin_account_validation($first_name,$last_name){
-    $errors='';
-    if(is_FN_invalid($first_name)){
-        $errors=$errors==''?'?':$errors.'&';
-        $errors=$errors.is_FN_invalid($first_name);
-        echo $errors;
-    }
-    if(is_LN_invalid($last_name)){
-        $errors=$errors==''?'?':$errors.'&';
-        $errors=$errors.is_LN_invalid($last_name);
-        // echo $errors;
-    }
-    // header('location: http://localhost/picsnap.root/admin-accounts.php'.$errors);
-    exit();
+function admin_account_validation($first_name, $last_name)
+{
+  $errors = '';
+  if (is_FN_invalid($first_name)) {
+    $errors = $errors == '' ? '?' : $errors . '&';
+    $errors = $errors . is_FN_invalid($first_name);
+    echo $errors;
+  }
+  if (is_LN_invalid($last_name)) {
+    $errors = $errors == '' ? '?' : $errors . '&';
+    $errors = $errors . is_LN_invalid($last_name);
+    // echo $errors;
+  }
+  // header('location: http://localhost/picsnap.root/admin-accounts.php'.$errors);
+  exit();
 }
 
 
