@@ -504,8 +504,8 @@ function change_password()
   }
 
   if (empty($err["empty_fields"]) && empty($err["old_password"]) && empty($err["new_password"]) && empty($err["confirm_password"])) {
-    $hashed_password = password_hash($pwd, PASSWORD_DEFAULT);
-    $addquery = "UPDATE users SET password = '$hashed_password' WHERE id = $userid";
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+    $addquery = "UPDATE users SET password ='$hashed_password' WHERE id = $userid";
     if (!mysqli_query($conn, $addquery)) {
       $err["mysql_error"] = sprintf("Error message: %s\n", mysqli_error($conn));
     } else {
