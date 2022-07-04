@@ -145,7 +145,13 @@ function getAct($conn,$id){
     return $row;
 }
 
-/* end of Sign up and Login functions Edgar */
+/* end of Sign up and Login functions Rami */
+
+/**
+ * Rami Chaouki
+ * Initializes a new cart row for given id if none exist
+ */
+
 
 /**
  * Ali Nehme
@@ -181,7 +187,7 @@ function unpaid_cart_id()
 
   $cart_id_array = mysqli_query($conn, "SELECT max(id) as cart_id FROM carts WHERE user_id='$userid' AND is_paid='0'");
   $cart_id = mysqli_fetch_array($cart_id_array)["cart_id"];
-
+  var_dump($cart_id);
   return $cart_id;
 }
 
