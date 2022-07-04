@@ -187,7 +187,6 @@ function unpaid_cart_id()
 
   $cart_id_array = mysqli_query($conn, "SELECT max(id) as cart_id FROM carts WHERE user_id='$userid' AND is_paid='0'");
   $cart_id = mysqli_fetch_array($cart_id_array)["cart_id"];
-  var_dump($cart_id);
   return $cart_id;
 }
 
