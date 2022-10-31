@@ -3,7 +3,7 @@
 $servername = 'localhost:3307';
 $username = 'root';
 $serpass = '';
-$databasename = 'homing_pigeon';
+$databasename = 'homing_pigeion';
 $imgDir='http://localhost/picsnap.root/images';
 $localImgDir='C:\Users\Rami\Desktop\John Abbott\Web Development 1\HomingPigeonProject\picsnap.root\images';
 
